@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - default.json
+      - renovate.json
   pull_request:
     paths:
       - default.json
+      - renovate.json
   workflow_dispatch: {}
 
 jobs:
@@ -17,6 +19,7 @@ jobs:
       matrix:
         config:
           - file: default.json
+          - file: renovate.json
 
     steps:
       - name: Checkout Git repository
