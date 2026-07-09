@@ -3,10 +3,12 @@ name: Test
 on:
   push:
     paths:
+      - .github/workflows/test.yml
       - default.json
       - renovate.json
   pull_request:
     paths:
+      - .github/workflows/test.yml
       - default.json
       - renovate.json
   workflow_dispatch: {}
