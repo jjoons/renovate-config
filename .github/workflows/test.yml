@@ -1,6 +1,10 @@
 on:
-  push: {}
-  pull_request: {}
+  push:
+    paths:
+      - default.json
+  pull_request:
+    paths:
+      - default.json
   workflow_dispatch: {}
 
 jobs:
