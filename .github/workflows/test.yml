@@ -31,7 +31,7 @@ jobs:
         id: npm-cache
         uses: actions/cache@v6
         with:
-          paths: ~/.npm
+          path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles(job.workflow_file_path) }}
           restore_keys: |
             ${{ runner.os }}-npm-
