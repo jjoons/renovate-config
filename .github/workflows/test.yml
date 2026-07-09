@@ -16,6 +16,6 @@ jobs:
       - name: Checkout Git repository
         uses: actions/checkout@v6
 
-      - name: Testing ${{ matrix.config.file }}
+      - name: Test Renovate configuration file - ${{ matrix.config.file }}
         run: |
           RENOVATE_CONFIG_FILE="${{ matrix.config.file }}" npx --yes -p renovate renovate-config-validator
