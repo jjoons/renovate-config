@@ -33,7 +33,7 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles(job.workflow_file_path) }}
-          restore_keys: |
+          restore-keys: |
             ${{ runner.os }}-npm-
 
       - name: Test Renovate configuration file - ${{ matrix.config.file }}
