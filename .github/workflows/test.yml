@@ -27,6 +27,15 @@ jobs:
       - name: Checkout Git repository
         uses: actions/checkout@v6
 
+      - name: Cache global npm assets
+        id: npm-cache
+        uses: actions/cache@v6
+        with:
+          paths: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles(job.workflow_file_path) }}
+          restore_keys: |
+            ${{ runner.os }}-npm-
+
       - name: Test Renovate configuration file - ${{ matrix.config.file }}
         run: |
           RENOVATE_CONFIG_FILE="${{ matrix.config.file }}" npx --yes -p renovate renovate-config-validator
