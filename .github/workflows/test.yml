@@ -1,0 +1,21 @@
+on:
+  push: {}
+  pull_request: {}
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        config:
+          - file: default.json
+
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v6
+
+      - name: Testing ${{ matrix.config.file }}
+        run: |
+          RENOVATE_CONFIG_FILE="${{ matrix.config.file }}" npx --yes -p renovate renovate-config-validator
