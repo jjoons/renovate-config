@@ -17,12 +17,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        config:
-          - file: default.json
-          - file: renovate.json
-
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v6
@@ -36,6 +30,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Test Renovate configuration file - ${{ matrix.config.file }}
+      - name: Test Renovate configuration files
         run: |
-          RENOVATE_CONFIG_FILE="${{ matrix.config.file }}" npx --yes -p renovate renovate-config-validator
+          renovate_files=(
+            "default.json"
+            "renovate.json"
+          )
+
+          npx --yes -p renovate renovate-config-validator --strict "${renovate_files[@]}"
