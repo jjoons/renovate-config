@@ -5,7 +5,7 @@
   "osvVulnerabilityAlerts": true,
   "packageRules": [
     {
-      "description": "Automerge minor and major update types",
+      "description": "Automerge minor and patch, digest update types",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "digest"],
       "automerge": true
