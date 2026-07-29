@@ -3,6 +3,7 @@
   "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
   "minimumReleaseAge": "5 days",
   "osvVulnerabilityAlerts": true,
+  "prCreation": "not-pending",
   "packageRules": [
     {
       "description": "Automerge minor and patch, digest update types",
