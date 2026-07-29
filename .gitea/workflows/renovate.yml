@@ -1,0 +1,51 @@
+name: Self-hosted Renovate
+
+on:
+  workflow_dispatch: {}
+
+env:
+  cache_dir: /tmp/renovate/cache/repository
+  cache_key: renovate-cache
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Restore Renovate cache
+        id: cache-restore
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.cache_dir }}
+          key: ${{ env.cache_key }}-${{ gitea.run_id }}-${{ gitea.run_attempt }}
+          restore_keys: |
+            ${{ env.cache_key }}-
+
+      - name: Fix restored cache ownership
+        if: steps.cache-restore.outputs.cache-matched-key != ''
+        run: |
+          sudo chown -R 12021:0 /tmp/renovate/
+          ls -R "$cache_dir"
+
+      - name: Run self-hosted Renovate
+        uses: renovatebot/github-action@v46.1.19
+        with:
+          token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          LOG_LEVEL: ${{ vars.RENOVATE_LOG_LEVEL || 'info' }}
+          RENOVATE_AUTODISCOVER: true
+          RENOVATE_ENDPOINT: ${{ secrets.RENOVATE_ENDPOINT }}
+          RENOVATE_GIT_AUTHOR: ${{ vars.RENOVATE_GIT_AUTHOR }}
+          RENOVATE_OPTIMIZE_FOR_DISABLED: true
+          RENOVATE_PLATFORM: gitea
+          # RENOVATE_REPOSITORIES: '[]'
+          RENOVATE_REPOSITORY_CACHE: ${{ vars.RENOVATE_REPOSITORY_CACHE || 'enabled' }}
+          RENOVATE_USERNAME: ${{ secrets.RENOVATE_USERNAME }}
+
+      - name: Save Renovate cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.cache_dir }}
+          key: ${{ env.cache_key }}-${{ gitea.run_id }}-${{ gitea.run_attempt }}
+          restore_keys: |
+            ${{ env.cache_key }}-
