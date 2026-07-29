@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  cache_dir: /tmp/renovate/cache/repository
+  cache_dir: /tmp/renovate/cache/renovate/repository
   cache_key: renovate-cache
 
 jobs:
