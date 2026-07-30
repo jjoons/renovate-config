@@ -25,14 +25,8 @@ jobs:
       - name: Checkout Git repository
         uses: actions/checkout@v6
 
-      - name: Restore global npm assets cache
-        id: npm-cache-restore
-        uses: actions/cache/restore@v6
-        with:
-          path: ~/.npm
-          key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
-          restore-keys: |
-            ${{ env.cache-key-prefix }}-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
 
       - name: Test Renovate configuration files
         run: |
@@ -41,10 +35,4 @@ jobs:
             "renovate.json"
           )
 
-          npx --yes -p renovate renovate-config-validator --strict "${renovate_files[@]}"
-
-      - name: Save global npm assets cache
-        uses: actions/cache/save@v6
-        with:
-          path: ~/.npm
-          key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
+          CI=true pnpm dlx --project renovate renovate-config-validator --strict "${renovate_files[@]}"
