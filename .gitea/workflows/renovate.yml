@@ -11,7 +11,8 @@ env:
   cache_key: renovate-cache
 
 jobs:
-  test:
+  renovate:
+    name: Renovate
     runs-on: ubuntu-latest
 
     steps:
