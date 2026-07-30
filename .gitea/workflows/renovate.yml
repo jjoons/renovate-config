@@ -7,8 +7,8 @@ on:
   workflow_dispatch: {}
 
 env:
-  cache_dir: /tmp/renovate/cache/renovate/repository
-  cache_key: renovate-cache
+  cache_repos_dir: /tmp/renovate/cache/renovate/repository
+  cache_repos_key: renovate-repos-cache
 
 jobs:
   renovate:
@@ -16,17 +16,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cache Renovate
-        id: cache-renovate
+      - name: Cache Renovate repositories
         uses: actions/cache@v6
+        id: cache-repos
         with:
-          path: ${{ env.cache_dir }}
-          key: ${{ env.cache_key }}-${{ gitea.run_id }}-${{ gitea.run_attempt }}
+          path: ${{ env.cache_repos_dir }}
+          key: ${{ env.cache_repos_key }}.${{ gitea.run_id }}-${{ gitea.run_attempt }}
           restore_keys: |
-            ${{ env.cache_key }}-
+            ${{ env.cache_repos_key }}.
 
       - name: Fix restore Renovate cache ownership
-        if: steps.cache-renovate.outputs.cache-matched-key != ''
+        if: steps.cache-repos.outputs.cache-matched-key != ''
         run: |
           sudo chown -R 12021:0 /tmp/renovate/
           ls -R "$cache_dir"
