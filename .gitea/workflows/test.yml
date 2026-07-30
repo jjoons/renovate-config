@@ -68,6 +68,17 @@ jobs:
 
           CI=true pnpm dlx --package renovate renovate-config-validator --strict "${renovate_files[@]}"
 
+      - name: Test debug messages
+        run: |
+          echo "ls -R $PWD"
+          ls -R . || true
+
+          echo "~/.cache/pnpm"
+          ls -R "~/.cache/pnpm" || true
+
+          echo "~/.local/share/pnpm/store"
+          ls -R "~/.local/share/pnpm/store" || true
+
       - name: Save global pnpm assets cache
         uses: actions/cache/save@v6
         with:
