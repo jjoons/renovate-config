@@ -27,6 +27,7 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
+        id: setup-pnpm
         with:
           version: latest
 
@@ -50,11 +51,14 @@ jobs:
           echo "~/.local/share/pnpm/store"
           ls -laR "~/.local/share/pnpm/store" || true
 
+          echo "steps.setup-pnpm.outputs.dest"
+          echo "${{ steps.setup-pnpm.outputs.dest }}"
+
       - name: Restore global pnpm assets cache
         id: npm-cache-restore
         uses: actions/cache/restore@v6
         with:
-          path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_DIR }}
+          path: ${{ steps.setup-pnpm.outputs.dest }}
           key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
           restore-keys: |
             ${{ env.cache-key-prefix }}-
@@ -70,17 +74,20 @@ jobs:
 
       - name: Test debug messages
         run: |
-          echo "ls -R $PWD"
-          ls -R . || true
+          echo "ls -laR $PWD"
+          ls -laR . || true
 
           echo "~/.cache/pnpm"
-          ls -R "~/.cache/pnpm" || true
+          ls -laR "~/.cache/pnpm" || true
 
           echo "~/.local/share/pnpm/store"
-          ls -R "~/.local/share/pnpm/store" || true
+          ls -laR "~/.local/share/pnpm/store" || true
+
+          echo "steps.setup-pnpm.outputs.dest"
+          echo "${{ steps.setup-pnpm.outputs.dest }}"
 
       - name: Save global pnpm assets cache
         uses: actions/cache/save@v6
         with:
-          path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_DIR }}
+          path: ${{ steps.setup-pnpm.outputs.dest }}
           key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
