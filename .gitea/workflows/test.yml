@@ -13,9 +13,6 @@ on:
       - renovate.json
   workflow_dispatch: {}
 
-env:
-  cache-key-prefix: renovate-npm
-
 jobs:
   test:
     name: Test
@@ -36,9 +33,9 @@ jobs:
         id: cache-pnpm-packages
         with:
           path: ${{ steps.setup-pnpm.outputs.dest }}
-          key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
+          key: ${{ runner.os }}-renovate-pnpm.${{ hashFiles('.gitea/workflows/test.yml') }}
           restore-keys: |
-            ${{ env.cache-key-prefix }}-
+            ${{ runner.os }}-renovate-pnpm.
 
       - name: Test Renovate configuration files
         run: |
