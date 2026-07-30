@@ -35,6 +35,18 @@ jobs:
         run: |
           PNPM_CACHE_DIR=$(pnpm store path)
           echo "PNPM_CACHE_DIR=$PNPM_CACHE_DIR" | tee -a $GITEA_OUTPUT
+          ls -R "$PNPM_CACHE_DIR"
+
+      - name: Test debug messages
+        run: |
+          echo "ls -R $PWD"
+          ls -R .
+
+          echo "~/.cache/pnpm"
+          [[ -d "~/.cache/pnpm" ]] && ls -R "~/.cache/pnpm"
+
+          echo "~/.local/share/pnpm/store"
+          [[ -d "~/.local/share/pnpm/store" ]] && ls -R "~/.local/share/pnpm/store"
 
       - name: Restore global pnpm assets cache
         id: npm-cache-restore
