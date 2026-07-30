@@ -33,7 +33,8 @@ jobs:
       - name: Get pnpm cache directory
         id: pnpm-cache
         run: |
-          echo "PNPM_CACHE_DIR=$(pnpm store path)" >> $GITEA_OUTPUT
+          PNPM_CACHE_DIR=$(pnpm store path)
+          echo "PNPM_CACHE_DIR=$PNPM_CACHE_DIR" | tee -a $GITEA_OUTPUT
 
       - name: Restore global pnpm assets cache
         id: npm-cache-restore
