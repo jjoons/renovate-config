@@ -37,4 +37,4 @@ jobs:
             "renovate.json"
           )
 
-          CI=true pnpm dlx --project renovate renovate-config-validator --strict "${renovate_files[@]}"
+          CI=true pnpm dlx --package renovate renovate-config-validator --strict "${renovate_files[@]}"
