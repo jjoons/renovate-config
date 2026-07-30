@@ -16,17 +16,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Restore Renovate cache
-        id: cache-restore
-        uses: actions/cache/restore@v6
+      - name: Cache Renovate
+        id: cache-renovate
+        uses: actions/cache@v6
         with:
           path: ${{ env.cache_dir }}
           key: ${{ env.cache_key }}-${{ gitea.run_id }}-${{ gitea.run_attempt }}
           restore_keys: |
             ${{ env.cache_key }}-
 
-      - name: Fix restored cache ownership
-        if: steps.cache-restore.outputs.cache-matched-key != ''
+      - name: Fix restore Renovate cache ownership
+        if: steps.cache-renovate.outputs.cache-matched-key != ''
         run: |
           sudo chown -R 12021:0 /tmp/renovate/
           ls -R "$cache_dir"
@@ -46,11 +46,3 @@ jobs:
           # RENOVATE_REPOSITORIES: '[]'
           RENOVATE_REPOSITORY_CACHE: ${{ vars.RENOVATE_REPOSITORY_CACHE || 'enabled' }}
           RENOVATE_USERNAME: ${{ secrets.RENOVATE_USERNAME }}
-
-      - name: Save Renovate cache
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ env.cache_dir }}
-          key: ${{ env.cache_key }}-${{ gitea.run_id }}-${{ gitea.run_attempt }}
-          restore_keys: |
-            ${{ env.cache_key }}-
