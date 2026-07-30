@@ -35,7 +35,9 @@ jobs:
         run: |
           PNPM_CACHE_DIR=$(pnpm store path)
           echo "PNPM_CACHE_DIR=$PNPM_CACHE_DIR" | tee -a $GITEA_OUTPUT
-          ls -R "$PNPM_CACHE_DIR"
+
+          echo "ls -R $PNPM_CACHE_DIR"
+          [[ -d "$PNPM_CACHE_DIR" ]] && ls -R "$PNPM_CACHE_DIR"
 
       - name: Test debug messages
         run: |
