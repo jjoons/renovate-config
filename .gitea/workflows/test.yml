@@ -30,6 +30,20 @@ jobs:
         with:
           version: latest
 
+      - name: Get pnpm cache directory
+        id: pnpm-cache
+        run: |
+          echo "PNPM_CACHE_DIR=$(pnpm store path)" >> $GITEA_OUTPUT
+
+      - name: Restore global pnpm assets cache
+        id: npm-cache-restore
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_DIR }}
+          key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
+          restore-keys: |
+            ${{ env.cache-key-prefix }}-
+
       - name: Test Renovate configuration files
         run: |
           renovate_files=(
@@ -38,3 +52,9 @@ jobs:
           )
 
           CI=true pnpm dlx --package renovate renovate-config-validator --strict "${renovate_files[@]}"
+
+      - name: Save global pnpm assets cache
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_DIR }}
+          key: ${{ env.cache-key-prefix }}-${{ hashFiles('.gitea/workflows/test.yml') }}
