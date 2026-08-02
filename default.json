@@ -8,6 +8,9 @@
   "minimumReleaseAge": "5 days",
   "osvVulnerabilityAlerts": true,
   "prCreation": "not-pending",
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "description": "Disable minimumReleaseAge for pin and pinDigest, digest update types",
