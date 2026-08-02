@@ -23,6 +23,7 @@ jobs:
           path: ${{ env.cache_repos_dir }}
           key: ${{ env.cache_repos_key }}.${{ gitea.run_id }}-${{ gitea.run_attempt }}
           restore_keys: |
+            ${{ env.cache_repos_key }}.${{ gitea.run_id }}-
             ${{ env.cache_repos_key }}.
 
       - name: Fix restore Renovate cache ownership
