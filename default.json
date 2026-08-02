@@ -10,6 +10,11 @@
   "prCreation": "not-pending",
   "packageRules": [
     {
+      "description": "Ignore minimumReleaseAge for pinDigest update type",
+      "matchUpdateTypes": ["pinDigest"],
+      "minimumReleaseAge": null
+    },
+    {
       "description": "Automerge minor and patch, digest update types",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "digest"],
