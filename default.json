@@ -10,8 +10,8 @@
   "prCreation": "not-pending",
   "packageRules": [
     {
-      "description": "Ignore minimumReleaseAge for pinDigest update type",
-      "matchUpdateTypes": ["pinDigest"],
+      "description": "Disable minimumReleaseAge for pin and pinDigest, digest update types",
+      "matchUpdateTypes": ["pin", "pinDigest", "digest"],
       "minimumReleaseAge": null
     },
     {
