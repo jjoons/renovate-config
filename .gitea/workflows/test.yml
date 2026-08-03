@@ -23,7 +23,7 @@ jobs:
         shell: bash
 
     container:
-      image: ghcr.io/renovatebot/renovate:44.0.0
+      image: ghcr.io/renovatebot/renovate:44.0.0@sha256:3b3267a55c48a45906dcef9694a4a2f639532b1afd4a7e8712db409b6abc22f4
 
     steps:
       - name: Checkout Git repository
