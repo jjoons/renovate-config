@@ -8,6 +8,7 @@
   "minimumReleaseAge": "5 days",
   "osvVulnerabilityAlerts": true,
   "prCreation": "not-pending",
+  "semanticCommits": "enabled",
   "lockFileMaintenance": {
     "enabled": true
   },
