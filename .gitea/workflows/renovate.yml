@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Cache Renovate repositories
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: cache-repos
         with:
           path: ${{ env.cache_repos_dir }}
