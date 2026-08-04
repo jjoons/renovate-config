@@ -14,8 +14,8 @@
   },
   "packageRules": [
     {
-      "description": "Disable minimumReleaseAge for pin and pinDigest, digest update types",
-      "matchUpdateTypes": ["pin", "pinDigest", "digest"],
+      "description": "Disable minimumReleaseAge for pin and pinDigest update types",
+      "matchUpdateTypes": ["pin", "pinDigest"],
       "minimumReleaseAge": null
     },
     {
