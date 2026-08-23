@@ -10,6 +10,8 @@ env:
   cache_repos_dir: /tmp/renovate/cache/renovate/repository
   cache_repos_key: renovate-repos-cache
 
+permissions: {}
+
 jobs:
   renovate:
     name: Renovate
@@ -36,18 +38,47 @@ jobs:
 
           ls -R "$cache_repos_dir" || echo "Renovate repositories cache directory not found: $cache_repos_dir"
 
+      - name: Setup Renovate host rule - docker.io
+        id: host-rule-docker-io
+        if: secrets.RENO_DOCKERHUB_USERNAME != '' && secrets.RENO_DOCKERHUB_PASSWORD != ''
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.RENO_DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.RENO_DOCKERHUB_PASSWORD }}
+        run: |
+          host_rule=$(echo '{"hostType":"docker","matchHost":"docker.io"}' | jq -rc --arg username "$DOCKERHUB_USERNAME" --arg password "$DOCKERHUB_PASSWORD" '. += { "username": $username, "password": $password }')
+          echo "host-rule=$host_rule" >> $GITEA_OUTPUT
+
+      - name: Setup Renovate merge host rules
+        id: renovate-host-rules
+        env:
+          HOST_RULE_DOCKER_IO: ${{ steps.host-rule-docker-io.outputs.host-rule }}
+        run: |
+          host_rules='[]'
+
+          if [ -n "$HOST_RULE_DOCKER_IO" ]; then
+            host_rules=$(echo "$host_rules" | jq -rc ". += [$HOST_RULE_DOCKER_IO]")
+          fi
+
+          total_count=$(echo "$host_rules" | jq -r '. | length')
+
+          echo "total-count=$total_count" | tee -a $GITEA_OUTPUT
+          echo "host-rules=$host_rules" >> $GITEA_OUTPUT
+
       - name: Run self-hosted Renovate
         uses: renovatebot/github-action@e09d604f8f803bb527bd8321ed5be06c460b8682 # v46.2.2
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
         env:
+          # ========== Self-hosted configurations ==========
           LOG_LEVEL: ${{ vars.RENOVATE_LOG_LEVEL || 'info' }}
           RENOVATE_AUTODISCOVER: true
           RENOVATE_ENDPOINT: ${{ secrets.RENOVATE_ENDPOINT }}
           RENOVATE_GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_COM_TOKEN }}
-          RENOVATE_GIT_AUTHOR: ${{ vars.RENOVATE_GIT_AUTHOR }}
           RENOVATE_OPTIMIZE_FOR_DISABLED: true
           RENOVATE_PLATFORM: gitea
           # RENOVATE_REPOSITORIES: '[]'
           RENOVATE_REPOSITORY_CACHE: ${{ vars.RENOVATE_REPOSITORY_CACHE || 'enabled' }}
           RENOVATE_USERNAME: ${{ secrets.RENOVATE_USERNAME }}
+          # ========== Repository configurations ==========
+          RENOVATE_GIT_AUTHOR: ${{ vars.RENOVATE_GIT_AUTHOR }}
+          RENOVATE_HOST_RULES: ${{ steps.renovate-host-rules.outputs.host-rules }}
