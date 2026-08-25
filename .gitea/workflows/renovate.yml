@@ -4,7 +4,29 @@ on:
   schedule:
     - cron: '21 * * * 1-5'
     - cron: '21 6,14,23 * * 0,6'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: dry run
+        required: false
+        default: ''
+        type: choice
+        options:
+          - ''
+          - full
+      repo-cache:
+        description: Repository cache
+        required: true
+        default: enabled
+        type: choice
+        options:
+          - enabled
+          - disabled
+          - reset
+      docker-max-pages:
+        description: Docker max pages (positive value)
+        default: 10
+        type: number
 
 env:
   cache_repos_dir: /tmp/renovate/cache/renovate/repository
@@ -72,12 +94,14 @@ jobs:
           # ========== Self-hosted configurations ==========
           LOG_LEVEL: ${{ vars.RENOVATE_LOG_LEVEL || 'info' }}
           RENOVATE_AUTODISCOVER: true
+          RENOVATE_DOCKER_MAX_PAGES: ${{ gitea.event.inputs.docker-max-pages || '10' }}
+          RENOVATE_DRY_RUN: ${{ gitea.event.inputs.dry-run || '' }}
           RENOVATE_ENDPOINT: ${{ secrets.RENOVATE_ENDPOINT }}
           RENOVATE_GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_COM_TOKEN }}
           RENOVATE_OPTIMIZE_FOR_DISABLED: true
           RENOVATE_PLATFORM: gitea
           # RENOVATE_REPOSITORIES: '[]'
-          RENOVATE_REPOSITORY_CACHE: ${{ vars.RENOVATE_REPOSITORY_CACHE || 'enabled' }}
+          RENOVATE_REPOSITORY_CACHE: ${{ gitea.event.inputs.repo-cache || vars.RENOVATE_REPOSITORY_CACHE || 'enabled' }}
           RENOVATE_USERNAME: ${{ secrets.RENOVATE_USERNAME }}
           # ========== Repository configurations ==========
           RENOVATE_GIT_AUTHOR: ${{ vars.RENOVATE_GIT_AUTHOR }}
