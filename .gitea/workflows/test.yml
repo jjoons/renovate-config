@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/renovatebot/renovate:44.141.0@sha256:6165430f0c4d62efd109d2c25d239798232c78b3eb199ad9f68e18cefc8102bc
+      image: ghcr.io/renovatebot/renovate:44.180.0@sha256:ad97d11f73542932f3615dcfd8bc9637d20f80ebf6cc97d0d12a885a19bf3412
 
     defaults:
       run:
