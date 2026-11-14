@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Default preset for Renovate",
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests",
@@ -7,7 +8,6 @@
   ],
   "minimumReleaseAge": "5 days",
   "osvVulnerabilityAlerts": true,
-  "prCreation": "not-pending",
   "semanticCommits": "enabled",
   "lockFileMaintenance": {
     "enabled": true
@@ -27,9 +27,13 @@
     {
       "description": "Set minimum release age optional to Docker datasource",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/renovatebot/renovate"],
-      "minimumReleaseAgeBehaviour": "timestamp-optional",
-      "automerge": false
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
+    },
+    {
+      "description": "Set minimum release age required to Docker datasource and Docker Hub",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.io/**"],
+      "minimumReleaseAgeBehaviour": "timestamp-required"
     }
   ]
 }
