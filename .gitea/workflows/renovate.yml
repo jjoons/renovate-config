@@ -50,7 +50,7 @@ jobs:
         with:
           path: ${{ env.CACHE_REPOS_DIR }}
           key: ${{ env.CACHE_REPOS_KEY }}.${{ gitea.run_id }}-${{ gitea.run_attempt }}
-          restore_keys: |
+          restore-keys: |
             ${{ env.CACHE_REPOS_KEY }}.${{ gitea.run_id }}-
             ${{ env.CACHE_REPOS_KEY }}.
 
@@ -75,15 +75,15 @@ jobs:
           if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_PASSWORD" ]; then
             echo "Setup host rule - docker.io"
 
-            host_rules=$(echo "$host_rules" | jq -rc \
+            host_rules="$(echo "$host_rules" | jq -rc \
               --arg username "$DOCKERHUB_USERNAME" --arg password "$DOCKERHUB_PASSWORD" \
               '. += [{ "hostType": "docker", "matchHost": "docker.io", $username, $password }]'
-            )
+            )"
           else
-            echo "Skip setup host rule  - docker.io"
+            echo "Skip setup host rule - docker.io"
           fi
 
-          total_count=$(echo "$host_rules" | jq -r '. | length')
+          total_count="$(echo "$host_rules" | jq -r '. | length')"
 
           echo "total-count=$total_count" | tee -a $GITEA_OUTPUT
           echo "host-rules=$host_rules" >> $GITEA_OUTPUT
