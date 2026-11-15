@@ -27,7 +27,8 @@
     {
       "description": "Set minimum release age optional to Docker datasource",
       "matchDatasources": ["docker"],
-      "minimumReleaseAgeBehaviour": "timestamp-optional"
+      "minimumReleaseAgeBehaviour": "timestamp-optional",
+      "automerge": false
     },
     {
       "description": "Set minimum release age required to Docker datasource and Docker Hub",
